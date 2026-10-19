@@ -36,9 +36,9 @@ Lucrezi în **același** fișier Google Sheets.
 
 Coloana B (Număr poză) o completezi tu manual, în foaia `Lista Absolventi` sau în Лист1. Dacă scrii în A15, C15, D15 peste formulă, se strică legătura; scrie doar în coloana B.
 
-**Totalul pe mărimi** (tabelul „Total Marimi robe”). Pentru fiecare mărime, pune în celula de lângă ea:
-`=COUNTIF($C$15:$C$40; "XS")`
-și la fel pentru S, M, L, XL, XXL. Pentru robele speciale, `=COUNTIF($C$15:$C$40; 3)` etc. (cifra fără ghilimele). Dacă Sheets-ul tău e setat pe engleză, separatorul în formule este virgula, nu punct și virgulă.
+**Totalul pe mărimi** (tabelul „Total Marimi robe”, cu 1, 2, 3, 4, 5). Pentru fiecare număr pune în celula de lângă el:
+`=COUNTIF($C$15:$C$40; 1)`
+și la fel pentru 2, 3, 4, 5 (schimbi doar ultimul număr). Dacă Sheets-ul tău e setat pe engleză, separatorul în formule este virgula, nu punct și virgulă.
 
 ## Partea 4 — Trimite Excel-ul înapoi la Absolvent.md
 Meniu **File → Download → Microsoft Excel (.xlsx)**. Formulele se transformă în valori, deci fișierul arată ca originalul, cu lista completată.

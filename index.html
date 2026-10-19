@@ -78,21 +78,17 @@
 
     <section class="step" id="s-roba">
       <h2><span class="n">5</span> Mărimea robei</h2>
-      <p class="hint">Alege greutatea și înălțimea, iar mărimea se calculează după tabelul de orientare.</p>
+      <p class="hint">Alege greutatea și înălțimea, iar site-ul îți arată numărul mărimii după tabelul de orientare (Robe Speciale, de la 1 la 5).</p>
       <div class="two">
         <div><label class="l" for="greutate">Greutate</label><select id="greutate"><option value="">— alege —</option></select></div>
         <div><label class="l" for="inaltime">Înălțime (m)</label><select id="inaltime"><option value="">— alege —</option></select></div>
       </div>
       <div class="rec" id="rec" style="display:none"></div>
-      <div style="margin-top:14px">
-        <label class="l" for="marime">Mărimea aleasă (o poți schimba, dacă vrei)</label>
-        <select id="marime"><option value="">— alege —</option></select>
-      </div>
-      <details class="tbl">
-        <summary>Vezi tabelele de mărimi</summary>
+      <details class="tbl" open>
+        <summary>Tabelul de mărimi (Robe Speciale)</summary>
         <div class="tblwrap" id="tabele"></div>
       </details>
-      <div class="errmsg">Alege mărimea robei.</div>
+      <div class="errmsg">Alege greutatea și înălțimea.</div>
     </section>
 
     <div class="submit">

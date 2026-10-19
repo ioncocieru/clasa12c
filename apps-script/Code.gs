@@ -96,8 +96,8 @@ function doPost(e) {
     const ln = l.getRange(2, 1, Math.max(1, l.getLastRow() - 1), 1).getValues();
     for (let i = 0; i < ln.length; i++) {
       if (ln[i][0] === d.nume) {
-        // în Excel mărimea e doar „M” sau „3”, fără „Neagră/Specială”
-        const marimeExcel = String(d.marime).replace(/^(Neagră|Specială)\s+/, "");
+        // mărimea robei = număr 1-5 (tabelul Robe Speciale)
+        const marimeExcel = Number(d.marime);
         l.getRange(i + 2, 3, 1, 2).setValues([[marimeExcel, "Album: " + d.album + "; " + d.fundal + "; Citate: " + d.citat]]);
         break;
       }

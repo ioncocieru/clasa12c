@@ -87,16 +87,6 @@ window.DATA = {
     [3, 3, 4, 5, 5],
     [4, 4, 5, 5, 5],
   ],
-  robeNegre: [
-    ["XS", "XS", "S", "M", "L"],
-    ["XS", "S", "S", "M", "L"],
-    ["S", "M", "M", "L", "XL"],
-    ["S", "M", "L", "XL", "XL"],
-    ["M", "M", "L", "XL", "XL"],
-    ["L", "L", "XL", "XXL", "XXL"],
-  ],
-  marimiNegre: ["XS", "S", "M", "L", "XL", "XXL"],
-  marimiSpeciale: [1, 2, 3, 4, 5],
 };
 
 DATA.albumCoperta = (a) => `https://absolvent.md/images/albume/modele/coperta-${a.slug}.webp`;

@@ -226,3 +226,6 @@ section.step.err { animation: shake .35s; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .ico-check path, .tick svg path, .big-check circle, .big-check path { stroke-dashoffset: 0; }
 }
+
+.rec .nr { display: inline-block; font-size: 44px; line-height: 1; color: var(--gold); margin-left: 8px; vertical-align: middle; animation: pop .4s cubic-bezier(.2, 1.6, .4, 1) both; }
+table.t td.hit { background: var(--red); color: #fff; font-weight: 800; box-shadow: inset 0 0 0 2px #fff; animation: pop .35s ease both; }

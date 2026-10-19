@@ -101,38 +101,33 @@
     clearErr("s-citat");
   });
 
-  // ---------- 5. Robe ----------
-  const gSel = $("greutate"), hSel = $("inaltime"), mSel = $("marime");
+  // ---------- 5. Robe (doar tabelul „Robe Speciale”, mărime = număr 1-5) ----------
+  const gSel = $("greutate"), hSel = $("inaltime");
   D.greutati.forEach((g, i) => gSel.add(new Option(g, i)));
   D.inaltimi.forEach((h, i) => hSel.add(new Option(h, i)));
-
-  mSel.innerHTML = '<option value="">— alege —</option>' +
-    '<optgroup label="Robă neagră">' + D.marimiNegre.map((m) => `<option value="Neagră ${m}">${m}</option>`).join("") + "</optgroup>" +
-    '<optgroup label="Robă specială">' + D.marimiSpeciale.map((m) => `<option value="Specială ${m}">${m}</option>`).join("") + "</optgroup>";
 
   function recalc() {
     const gi = gSel.value, hi = hSel.value;
     state.greutate = gi === "" ? "" : D.greutati[gi];
     state.inaltime = hi === "" ? "" : D.inaltimi[hi];
     const rec = $("rec");
-    if (gi === "" || hi === "") { rec.style.display = "none"; return; }
-    const neagra = D.robeNegre[gi][hi], speciala = D.robeSpeciale[gi][hi];
+    document.querySelectorAll("#tabele td.hit").forEach((c) => c.classList.remove("hit"));
+    if (gi === "" || hi === "") { rec.style.display = "none"; state.marime = ""; return; }
+    const nr = D.robeSpeciale[gi][hi];
+    state.marime = String(nr);
     rec.style.display = "block";
-    rec.innerHTML = `Recomandat: robă neagră <strong>${neagra}</strong> · robă specială <strong>${speciala}</strong>`;
-    mSel.value = "Neagră " + neagra;
-    state.marime = mSel.value;
+    rec.innerHTML = `Mărimea ta de robă: <strong class="nr">${nr}</strong>`;
+    const cell = document.querySelector(`#tabele tr[data-g="${gi}"] td[data-h="${hi}"]`);
+    if (cell) cell.classList.add("hit");
     clearErr("s-roba");
   }
   gSel.addEventListener("change", recalc);
   hSel.addEventListener("change", recalc);
-  mSel.addEventListener("change", () => { state.marime = mSel.value; clearErr("s-roba"); });
 
-  function tabel(titlu, data) {
-    return `<p style="margin:14px 0 0"><b>${titlu}</b></p><table class="t"><tr><th>Greutate / Înălțime</th>` +
-      D.inaltimi.map((h) => `<th>${h}</th>`).join("") + "</tr>" +
-      D.greutati.map((g, i) => `<tr><td>${g}</td>` + data[i].map((v) => `<td>${v}</td>`).join("") + "</tr>").join("") + "</table>";
-  }
-  $("tabele").innerHTML = tabel("Robe negre", D.robeNegre) + tabel("Robe speciale", D.robeSpeciale);
+  $("tabele").innerHTML = `<table class="t"><tr><th>Greutate / Înălțime</th>` +
+    D.inaltimi.map((h) => `<th>${h}</th>`).join("") + "</tr>" +
+    D.greutati.map((g, i) => `<tr data-g="${i}"><td>${g}</td>` +
+      D.robeSpeciale[i].map((v, j) => `<td data-h="${j}">${v}</td>`).join("") + "</tr>").join("") + "</table>";
 
   // ---------- Modal ----------
   const modal = $("modal");
@@ -163,7 +158,7 @@
   function validate() {
     const checks = [
       ["s-nume", !!state.nume], ["s-album", !!state.album], ["s-fundal", !!state.fundal],
-      ["s-citat", citatOk()], ["s-roba", !!state.marime && !!state.greutate && !!state.inaltime],
+      ["s-citat", citatOk()], ["s-roba", !!state.marime],
     ];
     let first = null;
     checks.forEach(([id, ok]) => {
