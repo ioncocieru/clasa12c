@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statistică — Clasa a XII-a C</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">Promoția 2027 · Clasa a XII-a C</div>
+    <h1>Statistică</h1>
+    <p class="sub">Cine a completat și ce a ales clasa până acum.</p>
+    <nav class="tabs">
+      <a href="index.html">Formular</a>
+      <a href="statistica.html" class="on">Statistică</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="demo" class="demo-banner" style="display:none">
+    <b>Mod demo:</b> datele vin doar din acest browser. Conectează Google Sheets (vezi README).
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v" id="v-done">–</div><div class="k">au completat din <span id="v-total"></span> elevi</div></div>
+    <div class="stat"><div class="v" id="v-left">–</div><div class="k">mai au de completat</div></div>
+    <div class="stat">
+      <div class="v" id="v-pct">–</div>
+      <div class="bar-outer"><div class="bar-inner" id="bar" style="width:0"></div></div>
+      <div class="k">progres</div>
+    </div>
+  </div>
+  <p class="refresh" id="refresh">Se încarcă…</p>
+
+  <div class="cols">
+    <section class="step">
+      <h2><svg class="ico ico-check ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg> Au completat (<span id="c-done">0</span>)</h2>
+      <ul class="names" id="l-done"></ul>
+      <p class="empty" id="e-done" style="display:none">Nimeni încă.</p>
+    </section>
+    <section class="step">
+      <h2><svg class="ico ico-clock wait" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path class="hand" d="M12 12V6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="hand2" d="M12 12l3.6 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Urmează să completeze (<span id="c-left">0</span>)</h2>
+      <ul class="names" id="l-left"></ul>
+      <p class="empty" id="e-left" style="display:none">Toți au completat.</p>
+    </section>
+  </div>
+
+  <div class="cols">
+    <section class="step"><h2>Albumul</h2><div id="t-album"></div></section>
+    <section class="step"><h2>Fundalul</h2><div id="t-fundal"></div></section>
+    <section class="step"><h2>Citate</h2><div id="t-citat"></div></section>
+    <section class="step"><h2>Mărimi de robe</h2><div id="t-marime"></div></section>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/stats.js"></script>
+</body>
+</html>
