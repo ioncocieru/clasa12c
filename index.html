@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Clasa a XII-a C — Alegeri album și robe</title>
+  <title>Clasa a XII-a C — Citatul din album</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -11,8 +11,8 @@
 <header class="top">
   <div class="wrap">
     <div class="kicker">Promoția 2027 · Clasa a XII-a C</div>
-    <h1>Alegeri pentru album și robe</h1>
-    <p class="sub">Completează o singură dată, durează 2–3 minute. Poți reveni și corecta oricând.</p>
+    <h1>Citatul din album</h1>
+    <p class="sub">Scrie-ți numele și citatul care va apărea în album. Poți reveni oricând să-l modifici.</p>
     <nav class="tabs">
       <a href="index.html" class="on">Formular</a>
       <a href="statistica.html">Statistică</a>
@@ -25,10 +25,25 @@
     <b>Mod demo:</b> site-ul nu este încă conectat la Google Sheets, răspunsurile se salvează doar în acest browser.
   </div>
 
+  <section class="step chosen">
+    <h2>Alegerea clasei</h2>
+    <p class="hint">Albumul și fundalul sunt deja alese. Rămâne doar citatul tău.</p>
+    <div class="two-img">
+      <a class="pick" href="https://absolvent.md/61-red" target="_blank" rel="noopener">
+        <img alt="Album Red" src="https://absolvent.md/images/albume/modele/coperta-61-red.webp" onerror="this.style.opacity='.2'">
+        <span><b>Album Red</b><small>Varianta roșie, să se potrivească cu ținuta neagră</small></span>
+      </a>
+      <a class="pick" id="fundal-link" target="_blank" rel="noopener">
+        <img alt="Fundal 35" id="fundal-img" onerror="this.style.opacity='.2'">
+        <span><b>Fundal 35</b><small>Fundalul pentru poze</small></span>
+      </a>
+    </div>
+  </section>
+
   <form id="form" novalidate>
     <section class="step" id="s-nume">
-      <h2><span class="n">1</span> Numele și prenumele</h2>
-      <p class="hint">Alege-ți numele din listă. Dacă ai completat deja, răspunsurile tale apar completate și le poți modifica.</p>
+      <h2><span class="n">1</span> Nume Prenume</h2>
+      <p class="hint">Alege-ți numele din listă. Dacă ai completat deja, citatul tău apare mai jos și îl poți modifica.</p>
       <select id="nume" required><option value="">— alege —</option></select>
       <div class="edit-banner" id="edit-banner" style="display:none"></div>
       <div class="errmsg">Alege-ți numele.</div>
@@ -36,59 +51,20 @@
 
     <section class="step" id="s-citat">
       <h2><span class="n">2</span> Citatul din album</h2>
-      <p class="hint">Citatul care va apărea în album, lângă numele tău. Îl poți modifica până <b id="termen"></b>.</p>
-      <div class="quote-preview" id="citat-prev">
+      <p class="hint">Citatul care va apărea în album, lângă numele tău. Este obligatoriu. Îl poți modifica până <b id="termen"></b>.</p>
+      <div class="quote-preview">
         <div class="qn" id="qn">Nume Prenume</div>
-        <div class="qt" id="qt">Citatul tău va apărea aici</div>
+        <div class="qt empty" id="qt">Citatul tău va apărea aici</div>
       </div>
       <label class="l" for="citat-text">Citatul tău</label>
       <textarea id="citat-text" maxlength="200" rows="3"
         placeholder="Scrie aici citatul exact cum vrei să apară în album"></textarea>
       <div class="count"><span id="citat-count">0</span>/200</div>
-      <label class="chk"><input type="checkbox" id="fara-citat"> Nu vreau citat în album</label>
-      <div class="errmsg" id="citat-err">Scrie citatul sau bifează „Nu vreau citat”.</div>
-    </section>
-
-    <section class="step" id="s-album">
-      <h2><span class="n">3</span> Ce album alegem?</h2>
-      <p class="hint">Apasă pe imaginea albumului dorit. „Vezi pozele” arată paginile modelului.</p>
-      <div class="note">
-        <b>Ține cont de vestimentația noastră: neagră.</b> Cocieru Ion recomandă
-        <a href="https://absolvent.md/61-red" target="_blank" rel="noopener">Red</a> sau
-        <a href="https://absolvent.md/5-gold" target="_blank" rel="noopener">Gold</a>,
-        dar într-o culoare roșie, ca să se potrivească cu ținuta neagră.
-      </div>
-      <div class="grid" id="albume"></div>
-      <div class="rec" id="album-ales" style="display:none"></div>
-      <div class="errmsg">Alege un album.</div>
-    </section>
-
-    <section class="step" id="s-fundal">
-      <h2><span class="n">4</span> Ce model de fundal alegem?</h2>
-      <p class="hint">Apasă pe imagine ca să o alegi, „Mărește” o deschide mare.
-        <a id="folder" target="_blank" rel="noopener">Tot folderul în Google Drive</a>.</p>
-      <div class="grid" id="fundaluri"></div>
-      <div class="rec" id="fundal-ales" style="display:none"></div>
-      <div class="errmsg">Alege un fundal.</div>
-    </section>
-
-    <section class="step" id="s-roba">
-      <h2><span class="n">5</span> Mărimea robei</h2>
-      <p class="hint">Alege greutatea și înălțimea, iar site-ul îți arată numărul mărimii după tabelul de orientare (Robe Speciale, de la 1 la 5).</p>
-      <div class="two">
-        <div><label class="l" for="greutate">Greutate</label><select id="greutate"><option value="">— alege —</option></select></div>
-        <div><label class="l" for="inaltime">Înălțime (m)</label><select id="inaltime"><option value="">— alege —</option></select></div>
-      </div>
-      <div class="rec" id="rec" style="display:none"></div>
-      <details class="tbl" open>
-        <summary>Tabelul de mărimi (Robe Speciale)</summary>
-        <div class="tblwrap" id="tabele"></div>
-      </details>
-      <div class="errmsg">Alege greutatea și înălțimea.</div>
+      <div class="errmsg" id="citat-err">Scrie citatul (minimum 3 caractere).</div>
     </section>
 
     <div class="submit">
-      <button class="btn" id="trimite" type="submit">Trimite răspunsurile</button>
+      <button class="btn" id="trimite" type="submit">Trimite citatul</button>
     </div>
   </form>
 
@@ -98,19 +74,15 @@
       <path d="M7 12.6l3.4 3.4L17.2 8.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
     </svg>
     <h2 style="justify-content:center">Mulțumim, <span id="g-nume"></span>!</h2>
-    <p class="hint">Răspunsurile tale au fost salvate.</p>
-    <div class="sum" id="g-sum"></div>
+    <p class="hint">Citatul tău a fost salvat.</p>
+    <div class="quote-preview" style="text-align:left;max-width:460px;margin:16px auto">
+      <div class="qn" id="g-qn"></div>
+      <div class="qt" id="g-qt"></div>
+    </div>
     <p><a href="statistica.html">Vezi cine a completat</a></p>
-    <button class="btn ghost" id="modifica" type="button">Modifică răspunsurile</button>
+    <button class="btn ghost" id="modifica" type="button">Modifică citatul</button>
   </section>
 </main>
-
-<div class="modal" id="modal">
-  <div class="box">
-    <div class="bar"><b id="m-titlu"></b><span><a id="m-link" target="_blank" rel="noopener">Deschide</a> <button class="x" id="m-x" type="button">Închide</button></span></div>
-    <div class="imgs" id="m-imgs"></div>
-  </div>
-</div>
 
 <script src="js/config.js"></script>
 <script src="js/data.js"></script>

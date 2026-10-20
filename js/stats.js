@@ -11,17 +11,6 @@
     return d.toLocaleString("ro-RO", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
   };
 
-  function tally(el, values, order) {
-    const counts = {};
-    values.forEach((v) => { if (v) counts[v] = (counts[v] || 0) + 1; });
-    let keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b, "ro", { numeric: true }));
-    if (order) keys = order.filter((k) => counts[k]);
-    const max = Math.max(1, ...keys.map((k) => counts[k]));
-    el.innerHTML = keys.length
-      ? keys.map((k) => `<div class="tally"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="tb"><i style="width:${(counts[k] / max) * 100}%"></i></span><b>${counts[k]}</b></div>`).join("")
-      : '<p class="empty">Încă nu sunt date.</p>';
-  }
-
   let last = "";
   function countUp(el, to, suffix) {
     const from = parseInt(el.textContent, 10) || 0;
@@ -66,11 +55,6 @@
     $("e-done").style.display = done.length ? "none" : "block";
     $("e-left").style.display = left.length ? "none" : "block";
 
-    const mine = done.map((n) => byName.get(n));
-    tally($("t-album"), mine.map((r) => r.album));
-    tally($("t-fundal"), mine.map((r) => r.fundal));
-    tally($("t-citat"), mine.map((r) => r.citat));
-    tally($("t-marime"), mine.map((r) => r.marime));
   }
 
   render();
