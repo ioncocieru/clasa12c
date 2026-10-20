@@ -28,13 +28,29 @@
   <form id="form" novalidate>
     <section class="step" id="s-nume">
       <h2><span class="n">1</span> Numele și prenumele</h2>
-      <p class="hint">Alege-ți numele din listă. Cei care au completat deja au mențiunea „(completat)”.</p>
+      <p class="hint">Alege-ți numele din listă. Dacă ai completat deja, răspunsurile tale apar completate și le poți modifica.</p>
       <select id="nume" required><option value="">— alege —</option></select>
+      <div class="edit-banner" id="edit-banner" style="display:none"></div>
       <div class="errmsg">Alege-ți numele.</div>
     </section>
 
+    <section class="step" id="s-citat">
+      <h2><span class="n">2</span> Citatul din album</h2>
+      <p class="hint">Citatul care va apărea în album, lângă numele tău. Îl poți modifica până <b id="termen"></b>.</p>
+      <div class="quote-preview" id="citat-prev">
+        <div class="qn" id="qn">Nume Prenume</div>
+        <div class="qt" id="qt">Citatul tău va apărea aici</div>
+      </div>
+      <label class="l" for="citat-text">Citatul tău</label>
+      <textarea id="citat-text" maxlength="200" rows="3"
+        placeholder="Scrie aici citatul exact cum vrei să apară în album"></textarea>
+      <div class="count"><span id="citat-count">0</span>/200</div>
+      <label class="chk"><input type="checkbox" id="fara-citat"> Nu vreau citat în album</label>
+      <div class="errmsg" id="citat-err">Scrie citatul sau bifează „Nu vreau citat”.</div>
+    </section>
+
     <section class="step" id="s-album">
-      <h2><span class="n">2</span> Ce album alegem?</h2>
+      <h2><span class="n">3</span> Ce album alegem?</h2>
       <p class="hint">Apasă pe imaginea albumului dorit. „Vezi pozele” arată paginile modelului.</p>
       <div class="note">
         <b>Ține cont de vestimentația noastră: neagră.</b> Cocieru Ion recomandă
@@ -48,32 +64,12 @@
     </section>
 
     <section class="step" id="s-fundal">
-      <h2><span class="n">3</span> Ce model de fundal alegem?</h2>
+      <h2><span class="n">4</span> Ce model de fundal alegem?</h2>
       <p class="hint">Apasă pe imagine ca să o alegi, „Mărește” o deschide mare.
         <a id="folder" target="_blank" rel="noopener">Tot folderul în Google Drive</a>.</p>
       <div class="grid" id="fundaluri"></div>
       <div class="rec" id="fundal-ales" style="display:none"></div>
       <div class="errmsg">Alege un fundal.</div>
-    </section>
-
-    <section class="step" id="s-citat">
-      <h2><span class="n">4</span> Dorim citate?</h2>
-      <p class="hint">Citatul apare lângă poza fiecărui elev în album.</p>
-      <div class="choice-row">
-        <button type="button" class="pill" data-v="Da" aria-pressed="false">Da, dorim citate</button>
-        <button type="button" class="pill" data-v="Nu" aria-pressed="false">Nu, fără citate</button>
-      </div>
-      <div id="citat-box" class="reveal-box" style="display:none">
-        <div class="note">
-          <b>Dacă da:</b> scrie mai jos, orientativ, citatul pe care îl vrei.
-          Citatul final îl alege fiecare până <b id="termen"></b>.
-        </div>
-        <label class="l" for="citat-text">Citatul dorit (orientativ)</label>
-        <textarea id="citat-text" maxlength="200" rows="3"
-          placeholder="Ex.: ceva despre prietenie, despre drumul înainte, o replică din film..."></textarea>
-        <div class="count"><span id="citat-count">0</span>/200</div>
-      </div>
-      <div class="errmsg" id="citat-err">Alege Da sau Nu.</div>
     </section>
 
     <section class="step" id="s-roba">

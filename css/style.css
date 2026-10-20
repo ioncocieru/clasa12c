@@ -229,3 +229,13 @@ section.step.err { animation: shake .35s; }
 
 .rec .nr { display: inline-block; font-size: 44px; line-height: 1; color: var(--gold); margin-left: 8px; vertical-align: middle; animation: pop .4s cubic-bezier(.2, 1.6, .4, 1) both; }
 table.t td.hit { background: var(--red); color: #fff; font-weight: 800; box-shadow: inset 0 0 0 2px #fff; animation: pop .35s ease both; }
+
+.edit-banner { margin-top: 12px; background: #0f2a1d; border: 1px solid #1f6b46; color: #bff0d6; border-radius: 10px; padding: 10px 14px; font-size: 14px; animation: slidein .3s ease both; }
+.edit-banner b { color: var(--ok); }
+.quote-preview { background: var(--panel2); border-left: 4px solid var(--red); border-radius: 10px; padding: 14px 16px; margin: 0 0 14px; }
+.quote-preview .qn { font-weight: 800; font-size: 18px; }
+.quote-preview .qt { margin-top: 4px; font-style: italic; font-size: 16px; overflow-wrap: anywhere; }
+.quote-preview .qt.empty { color: var(--muted); }
+label.chk { display: flex; align-items: center; gap: 10px; margin-top: 10px; color: var(--muted); font-size: 15px; cursor: pointer; }
+label.chk input { width: 20px; height: 20px; accent-color: var(--red); }
+textarea:disabled { opacity: .5; }

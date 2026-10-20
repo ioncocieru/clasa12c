@@ -33,6 +33,7 @@ Dacă modifici ulterior `Code.gs`, fă Deploy → Manage deployments → creion 
 ## Ce primești în Google Sheets
 - `Raspunsuri` — un rând per elev: dată, nume, album, fundal, citate, citat orientativ, greutate, înălțime, mărime robă.
   Dacă un elev retrimite, rândul lui se actualizează (nu se dublează).
+- `Citate` — Nume Prenume | Citat, în ordinea clasei, gata de copiat în album (se creează singură la primul răspuns).
 - `Lista Absolventi` — formatul din Excel-ul Absolvent.md (Nume Prenume · Număr poză · Mărime robă · Pachet/Notițe).
   Se completează automat; copiezi coloanele în Excel-ul original sau încarci foaia direct.
 

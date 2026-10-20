@@ -8,7 +8,7 @@ window.CONFIG = {
   SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwv7M9aOH91OXT3PDDTJitT_t5H8RGsHtKP33veO4XExvqjOJ5pOs5mZQIXCHx890ShtA/exec",
 
   // Termenul până la care elevii își aleg citatul
-  TERMEN_CITAT: "Marti, 20 octombrie",
+  TERMEN_CITAT: "miercuri, 21 octombrie",
 
   // Reîmprospătare automată a paginii de statistică (secunde)
   REFRESH_SECUNDE: 30,

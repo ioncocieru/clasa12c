@@ -18,14 +18,22 @@
     return j.rows;
   }
 
+  // Răspunsul complet al unui singur elev (pentru editare). null dacă nu există.
+  async function apiGet(nume) {
+    if (demo()) return demoRows().find((x) => x.nume === nume) || null;
+    const url = window.CONFIG.SCRIPT_URL + (window.CONFIG.SCRIPT_URL.includes("?") ? "&" : "?") +
+      "action=get&nume=" + encodeURIComponent(nume) + "&t=" + Date.now();
+    const r = await fetch(url, { redirect: "follow" });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "Eroare server");
+    return j.row || null;
+  }
+
   // Salvează (sau înlocuiește) răspunsul unui elev.
   async function apiSave(payload) {
     if (demo()) {
       const rows = demoRows().filter((x) => x.nume !== payload.nume);
-      rows.push({
-        nume: payload.nume, ts: new Date().toISOString(), album: payload.album,
-        fundal: payload.fundal, citat: payload.citat, citatText: payload.citatText, marime: payload.marime,
-      });
+      rows.push(Object.assign({}, payload, { ts: new Date().toISOString() }));
       localStorage.setItem(DEMO_KEY, JSON.stringify(rows));
       return true;
     }
@@ -40,12 +48,15 @@
     for (let i = 0; i < 5; i++) {
       await new Promise((res) => setTimeout(res, 1200));
       try {
-        const rows = await apiList();
-        if (rows.some((x) => x.nume === payload.nume)) return true;
+        const saved = await apiGet(payload.nume);
+        if (saved && saved.album === payload.album && saved.fundal === payload.fundal &&
+            saved.citat === payload.citat && String(saved.citatText || "") === String(payload.citatText || "") &&
+            String(saved.marime) === String(payload.marime) && saved.greutate === payload.greutate &&
+            saved.inaltime === payload.inaltime) return true;
       } catch (e) { /* mai încercăm */ }
     }
     return false;
   }
 
-  window.API = { list: apiList, save: apiSave, isDemo: demo };
+  window.API = { list: apiList, get: apiGet, save: apiSave, isDemo: demo };
 })();

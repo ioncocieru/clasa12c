@@ -18,7 +18,59 @@
       D.elevi.map((n) => `<option value="${n}">${done.has(n) ? "(completat) " : ""}${n}</option>`).join("");
     sel.value = cur;
   }
-  $("nume").addEventListener("change", (e) => { state.nume = e.target.value; clearErr("s-nume"); });
+  let editing = false;
+  const btnLabel = () => (editing ? "Salvează modificările" : "Trimite răspunsurile");
+  function setEditing(v) { editing = v; $("trimite").textContent = btnLabel(); }
+  const fmtDate = (iso) => {
+    const d = new Date(iso);
+    return isNaN(d) ? "" : d.toLocaleString("ro-RO", { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" });
+  };
+
+  // golește toate răspunsurile (păstrează numele ales)
+  function clearAnswers() {
+    state.album = ""; state.fundal = 0; state.greutate = ""; state.inaltime = ""; state.marime = "";
+    document.querySelectorAll("#albume .card, #fundaluri .card").forEach((c) => c.setAttribute("aria-pressed", "false"));
+    $("album-ales").style.display = "none"; $("fundal-ales").style.display = "none";
+    $("citat-text").value = ""; $("citat-text").disabled = false; $("fara-citat").checked = false;
+    state.citatText = ""; $("citat-count").textContent = "0";
+    $("greutate").value = ""; $("inaltime").value = "";
+    recalc(); updatePreview();
+  }
+
+  function fillAnswers(r) {
+    if (D.albume.some((a) => a.nume === r.album)) pickAlbum(r.album);
+    const fn = parseInt(String(r.fundal).replace(/\D/g, ""), 10);
+    if (fn >= 1 && fn <= D.fundaluri.length) pickFundal(fn);
+    if (r.citat === "Nu") { $("fara-citat").checked = true; $("citat-text").value = ""; state.citatText = ""; }
+    else { $("fara-citat").checked = false; $("citat-text").value = r.citatText || ""; state.citatText = r.citatText || ""; }
+    $("citat-text").disabled = $("fara-citat").checked;
+    $("citat-count").textContent = String($("citat-text").value.length);
+    const gi = D.greutati.indexOf(r.greutate), hi = D.inaltimi.indexOf(r.inaltime);
+    $("greutate").value = gi >= 0 ? String(gi) : ""; $("inaltime").value = hi >= 0 ? String(hi) : "";
+    recalc(); updatePreview();
+  }
+
+  async function onName() {
+    const nume = $("nume").value;
+    state.nume = nume; clearErr("s-nume");
+    const b = $("edit-banner");
+    b.style.display = "none"; setEditing(false);
+    clearAnswers();
+    if (!nume) return;
+    try { localStorage.setItem("clasa12c_nume", nume); } catch (e) { /* ok */ }
+    const row = rows.find((r) => r.nume === nume);
+    if (!row) return;
+    b.style.display = "block"; b.textContent = "Se încarcă răspunsurile tale…";
+    let full = null;
+    try { full = await API.get(nume); } catch (e) { /* mai jos */ }
+    if (state.nume !== nume) return; // a ales altcineva între timp
+    if (!full) { b.textContent = "Ai completat deja, dar nu am putut încărca răspunsurile. Reîncarcă pagina."; return; }
+    fillAnswers(full);
+    setEditing(true);
+    b.innerHTML = "<b>Ai completat deja</b>" + (row.ts ? " (" + esc(fmtDate(row.ts)) + ")" : "") +
+      ". Răspunsurile tale sunt completate mai jos, le poți modifica și apăsa „Salvează modificările”.";
+  }
+  $("nume").addEventListener("change", onName);
 
   // ---------- 2. Albume ----------
   function imgFallback(img) { img.onerror = () => { img.onerror = null; img.style.opacity = ".25"; }; }
@@ -84,21 +136,24 @@
     clearErr("s-fundal");
   }
 
-  // ---------- 4. Citate ----------
-  document.querySelectorAll("#s-citat .pill").forEach((p) => {
-    p.addEventListener("click", () => {
-      state.citat = p.dataset.v;
-      document.querySelectorAll("#s-citat .pill").forEach((q) => q.setAttribute("aria-pressed", String(q === p)));
-      $("citat-box").style.display = state.citat === "Da" ? "block" : "none";
-      $("citat-err").textContent = "Alege Da sau Nu.";
-      clearErr("s-citat");
-      if (state.citat === "Da") setTimeout(() => $("citat-text").focus({ preventScroll: true }), 50);
-    });
-  });
+  // ---------- 2. Citat (apare în album, lângă nume) ----------
+  const citatMode = () => ($("fara-citat").checked ? "Nu" : "Da");
+  function updatePreview() {
+    $("qn").textContent = state.nume || "Nume Prenume";
+    const t = state.citatText.trim();
+    const qt = $("qt");
+    if (citatMode() === "Nu") { qt.textContent = "Fără citat în album"; qt.classList.add("empty"); }
+    else if (t) { qt.textContent = "„" + t + "”"; qt.classList.remove("empty"); }
+    else { qt.textContent = "Citatul tău va apărea aici"; qt.classList.add("empty"); }
+  }
   $("citat-text").addEventListener("input", (e) => {
     state.citatText = e.target.value;
     $("citat-count").textContent = e.target.value.length;
-    clearErr("s-citat");
+    updatePreview(); clearErr("s-citat");
+  });
+  $("fara-citat").addEventListener("change", () => {
+    $("citat-text").disabled = $("fara-citat").checked;
+    updatePreview(); clearErr("s-citat");
   });
 
   // ---------- 5. Robe (doar tabelul „Robe Speciale”, mărime = număr 1-5) ----------
@@ -148,17 +203,17 @@
   // ---------- Validare + trimitere ----------
   function clearErr(id) { $(id).classList.remove("err"); }
   function citatOk() {
-    if (!state.citat) { $("citat-err").textContent = "Alege Da sau Nu."; return false; }
-    if (state.citat === "Da" && state.citatText.trim().length < 3) {
-      $("citat-err").textContent = "Scrie, orientativ, citatul pe care îl vrei.";
+    if (citatMode() === "Nu") return true;
+    if (state.citatText.trim().length < 3) {
+      $("citat-err").textContent = "Scrie citatul sau bifează „Nu vreau citat în album”.";
       return false;
     }
     return true;
   }
   function validate() {
     const checks = [
-      ["s-nume", !!state.nume], ["s-album", !!state.album], ["s-fundal", !!state.fundal],
-      ["s-citat", citatOk()], ["s-roba", !!state.marime],
+      ["s-nume", !!state.nume], ["s-citat", citatOk()], ["s-album", !!state.album],
+      ["s-fundal", !!state.fundal], ["s-roba", !!state.marime],
     ];
     let first = null;
     checks.forEach(([id, ok]) => {
@@ -173,19 +228,24 @@
     e.preventDefault();
     if (!validate()) return;
     const btn = $("trimite");
-    btn.disabled = true; btn.textContent = "Se trimite…";
+    btn.disabled = true; btn.textContent = "Se salvează…";
     const payload = {
       nume: state.nume, album: state.album, fundal: "Fundal " + state.fundal,
-      citat: state.citat, citatText: state.citat === "Da" ? state.citatText.trim() : "", greutate: state.greutate, inaltime: state.inaltime, marime: state.marime,
+      citat: citatMode(), citatText: citatMode() === "Da" ? state.citatText.trim() : "", greutate: state.greutate, inaltime: state.inaltime, marime: state.marime,
     };
     try {
       const ok = await API.save(payload);
       if (!ok) throw new Error("not confirmed");
+      const i = rows.findIndex((r) => r.nume === payload.nume);
+      const rec = { ...payload, ts: new Date().toISOString() };
+      if (i >= 0) rows[i] = rec; else rows.push(rec);
+      fillNames();
+      setEditing(true);
       showDone(payload);
     } catch (err) {
       alert("Nu am putut confirma salvarea. Verifică internetul și apasă din nou „Trimite”. Dacă se repetă, anunță-l pe cel care administrează site-ul.");
     } finally {
-      btn.disabled = false; btn.textContent = "Trimite răspunsurile";
+      btn.disabled = false; btn.textContent = btnLabel();
     }
   });
 
@@ -195,17 +255,18 @@
     $("gata").style.display = "block";
     $("g-nume").textContent = p.nume;
     $("g-sum").innerHTML = [
-      ["Album", p.album], ["Fundal", p.fundal],
-      ["Citate", p.citat],
-      ...(p.citat === "Da" ? [["Citat orientativ", esc(p.citatText)], ["Citatul final", "până " + C.TERMEN_CITAT]] : []),
-      ["Greutate / înălțime", p.greutate + " · " + p.inaltime + " m"], ["Mărime robă", p.marime],
+      ["Nume Prenume", esc(p.nume)],
+      ["Citat în album", p.citat === "Da" ? "„" + esc(p.citatText) + "”" : "Fără citat"],
+      ["Album", esc(p.album)], ["Fundal", esc(p.fundal)],
+      ["Greutate / înălțime", esc(p.greutate) + " · " + esc(p.inaltime) + " m"], ["Mărime robă", esc(p.marime)],
     ].map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   $("modifica").addEventListener("click", () => {
     $("gata").style.display = "none";
     $("form").style.display = "block";
-    loadRows();
+    setEditing(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   async function loadRows() {
@@ -213,5 +274,11 @@
     fillNames();
   }
   fillNames();
-  loadRows();
+  loadRows().then(() => {
+    // dacă elevul a mai intrat de pe acest telefon, îi alegem numele automat
+    let saved = "";
+    try { saved = localStorage.getItem("clasa12c_nume") || ""; } catch (e) { /* ok */ }
+    if (saved && D.elevi.includes(saved)) { $("nume").value = saved; onName(); }
+  });
+  updatePreview();
 })();
