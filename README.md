@@ -1,35 +1,32 @@
-# Site clasa a XII-a C: citatul din album
+# Site clasa a XII-a C: numărul pozei
 
-Site static (HTML/CSS/JS, fără build). Elevul își alege numele și scrie citatul (obligatoriu).
-Albumul **Red** și fundalul **35** sunt alese de clasă și apar doar ca informare.
-Răspunsurile ajung într-un **Google Sheet**, în foaia `Citate` (Nume Prenume | Citat | Data).
+Fiecare elev își alege numele și scrie **numărul pozei** pe care o vrea în album (ex. 0123).
+Răspunsurile ajung într-un Google Sheet nou numit **POZE** (Nume Prenume | Număr poză | Data).
+Se poate reveni și schimba numărul.
 
-- `index.html`: formularul (se poate intra din nou și edita citatul)
+- `index.html`: formularul
 - `statistica.html`: câți au completat din 26, cine a completat, cine urmează
 - `js/config.js`: **singurul fișier de editat** (adresa Google Script și termenul)
-- `apps-script/Code.gs`: codul care se lipește în Google Sheets
+- `apps-script/Code.gs`: codul pentru foaia POZE
 
-## Pasul 1: Fundalul din Google Drive trebuie să fie public
-Poza fundalului 35 se afișează din Drive. Share → General access → **Anyone with the link (Viewer)**.
+## Pasul 1: Excel-ul nou POZE (Google Sheets)
+1. drive.google.com -> New -> **Google Sheets** -> redenumește-l **POZE**.
+2. Extensions -> **Apps Script**. Șterge codul existent și lipește tot `apps-script/Code.gs`. Salvează.
+3. În meniul de lângă butonul Run alege funcția `setup` și apasă **Run** (acceptă permisiunile).
+   Se pregătește foaia `POZE` cu cei 26 de elevi.
+4. **Deploy -> New deployment -> Web app**: Execute as: **Me**, Who has access: **Anyone**. Copiază adresa `/exec`.
 
-## Pasul 2: Google Sheet + Apps Script
-1. Deschide Google Sheet-ul tău (poți folosi același, celelalte foi nu sunt atinse).
-2. Extensions → **Apps Script**. Șterge codul existent și lipește tot `apps-script/Code.gs`. Salvează.
-3. Alege funcția `setup` și apasă **Run**. Se creează foaia `Citate` (dacă există deja, nu se șterge nimic).
-   Dacă ai citate vechi în foaia `Raspunsuri`, rulează apoi și `sincronizeazaCitate`.
-4. **Deploy → Manage deployments → creion (Edit) → Version: New version → Deploy**
-   (la prima instalare: New deployment → Web app, Execute as: Me, Who has access: Anyone). Copiază adresa `/exec`.
+## Pasul 2: Conectează site-ul
+În `js/config.js` lipește adresa la `SCRIPT_URL` și verifică `TERMEN`.
 
-## Pasul 3: Conectează site-ul
-În `js/config.js` lipește adresa între ghilimele la `SCRIPT_URL`.
-
-## Pasul 4: GitHub + Vercel
-Pune conținutul folderului într-un repo GitHub, apoi vercel.com → Add New → Project → Deploy (Framework: Other).
+## Pasul 3: GitHub + Vercel
+Repo pe GitHub cu conținutul folderului, apoi vercel.com -> Add New -> Project -> Deploy (Framework: Other).
 
 ## Mod demo
-Cât `SCRIPT_URL` e gol, site-ul funcționează local (datele rămân în browser).
+Cât `SCRIPT_URL` e gol, site-ul funcționează local (datele rămân în browser), ca să-l testezi.
 
 ## Note
-- Nu există parolă: oricine alege numele altui coleg îi poate vedea și modifica citatul.
-- Pagina de statistică nu arată citatele, doar cine a completat.
+- Numărul pozei acceptă cifre, litere, `-` și `_` (maxim 20), iar zerourile din față se păstrează (0123).
+- Nu există parolă: oricine alege numele altui coleg îi poate vedea și schimba numărul.
+- Pagina de statistică nu arată numerele, doar cine a completat.
 - Lista elevilor (26, fără Isacenco Maxim) este în `js/data.js` **și** în `apps-script/Code.gs`.
